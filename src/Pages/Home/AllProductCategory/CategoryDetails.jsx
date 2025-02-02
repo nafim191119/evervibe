@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const CategoryDetails = () => {
     const { category } = useParams();
@@ -16,8 +16,8 @@ const CategoryDetails = () => {
     }, [category]);
 
     return (
-        <div className="container mx-auto p-4 mb-24">
-            <h2 className="text-3xl font-bold mb-10 capitalize text-center">{category} Products</h2>
+        <div className="container mx-auto p-16 mb-24">
+            <h2 className="text-3xl font-bold mb-10 text-center uppercase">{category} Products</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {products.length > 0 ? (
                     products.map((product) => {
@@ -26,12 +26,12 @@ const CategoryDetails = () => {
                         const amountSaved = (originalPrice - product.price).toFixed(2);
 
                         return (
-                            <div key={product.id} className="border p-4 rounded-lg shadow-md bg-white transition-transform hover:scale-105 flex flex-col h-full">
-                                <img src={product.thumbnail} alt={product.title} className="w-full h-60 object-cover mb-2 rounded" />
+                            <div key={product.id} className="border rounded-lg shadow-md bg-white transition-transform hover:scale-105 flex flex-col h-full">
+                                <img src={product.thumbnail} alt={product.title} className="w-full h-full object-cover mb-2 rounded" />
                                 <div className="flex-grow mx-auto">
                                     <h4 className="text-lg min-h-[40px] text-center text-black font-bold">{product.title}</h4>
                                     <div>
-                                        <p className="text-white bg-black px-1 py-[2px] text-[12px] mx-20 rounded-md text-center">Save: ${amountSaved}</p> {/* Savings */}
+                                        <p className="text-white bg-black px-2 py-[2px] text-[12px] mx-16 rounded-md text-center font-semibold">Save: ${amountSaved}</p> {/* Savings */}
                                     </div>
                                     {/* Price Display */}
                                     <div className="mt-1 flex gap-2 justify-center">
@@ -47,8 +47,8 @@ const CategoryDetails = () => {
                                     </div>
                                 </div>
 
-                                <button className="w-full mt-3 bg-black text-white py-2 rounded-lg transition duration-300 hover:bg-gray-900 active:scale-95">
-                                    Add to Cart 🛒
+                                <button className="w-full mt-3 bg-black text-white py-2 transition duration-300 hover:bg-gray-900 active:scale-95">
+                                    <Link to={`/product/${product.id}`} className="block w-full h-full">Buy Now 🛒</Link>
                                 </button>
                             </div>
                         );

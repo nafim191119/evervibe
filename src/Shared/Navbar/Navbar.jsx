@@ -11,9 +11,12 @@ const Navbar = () => {
     };
 
     return (
-        <div className="navbar h-[90px] bg-gray-100 px-4 md:px-8 gap-2">
+        <div className="navbar h-[95px] bg-white px-4 md:px-8 gap-2 shadow-lg">
             <div className="flex-1 flex items-center">
-                <Link to={'/'} className="btn btn-ghost text-3xl uppercase text-black font-bold">Evervibe</Link>
+                <Link to={'/'}>
+                    <img className='w-48' src="https://i.ibb.co.com/v47v1GxC/Logo-EV-removebg-preview.png" alt="" />
+                </Link>
+
             </div>
 
             <div className="flex-none space-x-2 items-center hidden md:flex">
