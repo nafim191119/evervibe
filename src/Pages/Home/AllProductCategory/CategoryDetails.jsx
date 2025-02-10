@@ -6,13 +6,19 @@ const CategoryDetails = () => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch("/data.json") // Fetch from local public directory
+        fetch("http://localhost:5000/menu")
             .then((res) => res.json())
             .then((data) => {
+                if (!Array.isArray(data)) {
+                    console.error("Invalid API response: Expected an array.");
+                    return;
+                }
+                
                 // Filter products that belong to the selected category
-                const filteredProducts = data.products.filter((product) => product.category === category);
+                const filteredProducts = data.filter((product) => product.category === category);
                 setProducts(filteredProducts);
-            });
+            })
+            .catch((error) => console.error("Error fetching data:", error));
     }, [category]);
 
     return (

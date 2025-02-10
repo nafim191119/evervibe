@@ -5,47 +5,53 @@ const AllProductCategory = () => {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        // Fetch products from API
-        fetch("/data.json") // Public folder files should be accessed like this
+        fetch("http://localhost:5000/menu")
             .then((res) => res.json())
             .then((data) => {
-                // Extract unique categories with their respective first product thumbnail
+                console.log("Fetched Data:", data); // Debugging
+
+                if (!Array.isArray(data)) {
+                    console.error("Invalid API response: Expected an array.");
+                    return;
+                }
+
                 const categoryMap = {};
-                data.products.forEach((product) => {
-                    if (!categoryMap[product.category]) {
-                        categoryMap[product.category] = product.thumbnail;
+                data.forEach((product) => {
+                    if (product?.category && product?.thumbnail) {
+                        if (!categoryMap[product.category]) {
+                            categoryMap[product.category] = product.thumbnail;
+                        }
                     }
                 });
 
-                // Convert to array format
                 const categoryArray = Object.entries(categoryMap).map(([category, thumbnail]) => ({
                     category,
                     thumbnail,
                 }));
 
                 setCategories(categoryArray);
-            });
+            })
+            .catch((error) => console.error("Error fetching data:", error));
     }, []);
 
     return (
-        <div className="container mx-auto py-10 px-32">
-            <h2 className="text-3xl font-bold mb-10 text-center uppercase">Product Categories</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-6 gap-3">
-                {categories.map(({ category, thumbnail }) => (
-                    <Link key={category} to={`/category/${category}`}>
-                        <div className="relative bg-white rounded-lg shadow-lg w-48 h-56 transition-all hover:shadow-xl overflow-hidden flex items-center justify-center">
-                            {/* Product Image */}
-                            <img src={thumbnail} alt={category} className="w-full h-full object-cover" />
-
-                            {/* Category Name Overlay */}
-                            <div className="absolute top-[-5px] bg-white shadow-md px-3 py-1 rounded-md text-sm font-semibold text-black">
-                                {category}
+        <div className="container mx-auto py-10 px-60">
+            <h2 className="text-3xl font-bold mb-10 text-center uppercase text-black">Products Categories</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-3">
+                {categories.length > 0 ? (
+                    categories.map(({ category, thumbnail }) => (
+                        <Link key={category} to={`/category/${category}`}>
+                            <div className="relative bg-white rounded-lg shadow-lg w-48 h-56 transition-all hover:shadow-xl overflow-hidden flex items-center justify-center">
+                                <img src={thumbnail} alt={category} className="w-full h-full object-cover" />
+                                <div className="absolute top-[-5px] bg-white shadow-md px-3 py-1 rounded-md text-sm font-semibold text-black">
+                                    {category}
+                                </div>
                             </div>
-                        </div>
-                    </Link>
-                ))}
-
-
+                        </Link>
+                    ))
+                ) : (
+                    <p className="text-center text-gray-500">No categories found.</p>
+                )}
             </div>
         </div>
     );

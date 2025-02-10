@@ -7,13 +7,13 @@ const Banner = () => {
         <div>
             <Carousel>
                 <div>
-                    <img src="https://i.ibb.co.com/F2hjrRf/Green-Watercolour-Opening-Soon-Banner.png" />
+                    <img src="https://i.ibb.co.com/WvCM30nV/IMG-8156-psd-png.png" />
                 </div>
                 <div>
-                    <img src="https://i.ibb.co.com/cXg7w3rq/Black-and-White-Minimalist-Elegant-Fashion-Banner.png" />
+                    <img src="https://i.ibb.co.com/ccVNG3vk/IMG-8165.jpg" />
                 </div>
                 <div>
-                    <img src="https://i.ibb.co.com/G4518Nm0/Black-Red-Minimalist-Fashion-Product-Introduction-Landscape-Banner.png" />
+                    <img src="https://i.ibb.co.com/prkrgWYP/IMG-8166.jpg" />
                 </div>
             </Carousel>
         </div>

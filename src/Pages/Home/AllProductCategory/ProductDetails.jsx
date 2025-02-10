@@ -6,14 +6,22 @@ const ProductDetails = () => {
     const [product, setProduct] = useState(null);
     const [selectedSize, setSelectedSize] = useState("");
     const [quantity, setQuantity] = useState(1);
+    const [mainImage, setMainImage] = useState(""); // Track current main image
 
     useEffect(() => {
-        fetch("/data.json")
+        fetch("http://localhost:5000/menu")
             .then((res) => res.json())
             .then((data) => {
-                const foundProduct = data.products.find((p) => p.id === parseInt(id));
+                if (!Array.isArray(data)) {
+                    console.error("Invalid API response: Expected an array.");
+                    return;
+                }
+
+                const foundProduct = data.find((p) => p.id === parseInt(id));
                 setProduct(foundProduct);
-                setSelectedSize(foundProduct.sizes[0]); // Set default size
+                if (!foundProduct) return;
+                setSelectedSize(foundProduct.sizes ? foundProduct.sizes[0] : "");
+                setMainImage(foundProduct.images ? foundProduct.images[0] : "");
             });
     }, [id]);
 
@@ -23,21 +31,50 @@ const ProductDetails = () => {
     const discountAmount = (product.price * product.discountPercentage) / 100;
     const discountedPrice = product.price - discountAmount;
 
+
+    const addToCart = (product) => {
+        if (!product || typeof product !== "object") return;
+    
+        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+        existingCart.push({
+            id: product.id,
+            name: product.title,  // Fix: use product.title instead of product.name
+            size: selectedSize,  // Fix: store the selected size
+            quantity: quantity,  // Fix: store the selected quantity
+            price: discountedPrice * quantity, // Fix: calculate price based on quantity
+        });
+    
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+        window.location.reload(); // Refresh to update cart count
+    };
+    
+
     return (
         <div className="container mx-auto p-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
                 {/* Product Image Slider */}
                 <div className="flex flex-col items-center">
+                    {/* Main Image Display */}
                     <div className="w-full h-96 bg-gray-200">
-                        <img src={product.images[0]} alt={product.title} className="w-full h-full object-cover rounded" />
+                        <img
+                            src={mainImage}
+                            alt={product.title}
+                            className="w-full h-full object-cover rounded"
+                        />
                     </div>
+
+                    {/* Thumbnails */}
                     <div className="flex mt-3 space-x-2">
                         {product.images.map((img, index) => (
                             <img
                                 key={index}
                                 src={img}
                                 alt="Thumbnail"
-                                className="w-16 h-16 object-cover border rounded cursor-pointer hover:border-blue-500"
+                                className={`w-16 h-16 object-cover border rounded cursor-pointer transition-all 
+                                ${mainImage === img ? "border-2 border-blue-500" : "hover:border-blue-500"}`}
+                                onClick={() => setMainImage(img)} // Change main image on click
                             />
                         ))}
                     </div>
@@ -46,10 +83,10 @@ const ProductDetails = () => {
                 {/* Product Info */}
                 <div>
                     <h2 className="text-4xl font-bold text-black mb-8">{product.title}</h2>
+
                     {/* Price & Discount Details */}
                     <div>
                         <p className="text-xl text-red-500 line-through">${product.price.toFixed(2)}</p>
-                        {/* <p className="text-sm text-red-500">-${discountAmount.toFixed(2)} off</p> */}
                         <p className="text-4xl font-bold text-green-600">${discountedPrice.toFixed(2)}</p>
                     </div>
 
@@ -87,7 +124,7 @@ const ProductDetails = () => {
 
                         {/* Add to Cart Button */}
                         <button
-                            onClick={() => alert(`Added ${quantity}x ${product.title} (${selectedSize}) to Cart!`)}
+                            onClick={() => addToCart(product)}
                             className="px-6 py-3 bg-black text-white rounded hover:bg-gray-800 transition w-full md:w-auto"
                         >
                             Add to Cart 🛒
@@ -98,6 +135,7 @@ const ProductDetails = () => {
                     <div className="divider text-black"></div>
 
                     <p className="text-gray-600">{product.description}</p>
+
                     {/* Specifications */}
                     <div className="mt-4">
                         <h3 className="text-lg font-semibold text-black">Specifications:</h3>
