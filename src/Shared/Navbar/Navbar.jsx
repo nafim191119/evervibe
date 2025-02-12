@@ -8,7 +8,16 @@ const Navbar = () => {
     const { user, logOut } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [cartCount, setCartCount] = useState(0);
-    const isAdmin = true;
+    // List of admin emails
+    const adminEmails = [
+        'nafim191119@gmail.com',
+        'ratul.biswas012@gmail.com',
+        'minarstu2003@gmail.com',
+        'assaduzzamanjinan810@gmail.com'
+    ];
+
+    // Check if current user is admin
+    const isAdmin = user && adminEmails.includes(user.email);
 
     useEffect(() => {
         const updateCartCount = () => {
@@ -42,7 +51,7 @@ const Navbar = () => {
                             <Link to="/" className="text-gray-700 hover:text-blue-600 transition">Home</Link>
                             <Link to="/products" className="text-gray-700 hover:text-blue-600 transition">Products</Link>
                             <Link to="/offers" className="text-gray-700 hover:text-blue-600 transition">Offers</Link>
-                            <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 transition">Dashboard</Link>
+                            <Link to="/dashboard/cart" className="text-gray-700 hover:text-blue-600 transition">Dashboard</Link>
                         </div>
                         :
                         <div className="hidden md:flex space-x-8">

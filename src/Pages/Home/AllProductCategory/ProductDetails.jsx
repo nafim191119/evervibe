@@ -61,7 +61,7 @@ const ProductDetails = () => {
                         <img
                             src={mainImage}
                             alt={product.title}
-                            className="w-full h-full object-cover rounded"
+                            className="w-full h-full object-contain rounded"
                         />
                     </div>
 

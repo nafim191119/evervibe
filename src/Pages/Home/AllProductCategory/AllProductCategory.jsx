@@ -8,8 +8,6 @@ const AllProductCategory = () => {
         fetch("http://localhost:5000/menu")
             .then((res) => res.json())
             .then((data) => {
-                console.log("Fetched Data:", data); // Debugging
-
                 if (!Array.isArray(data)) {
                     console.error("Invalid API response: Expected an array.");
                     return;

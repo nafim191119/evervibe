@@ -52,13 +52,14 @@ const CheckoutPage = () => {
 
         if (response.ok) {
             alert("Order placed successfully!");
+            localStorage.removeItem("cart");
             navigate("/");
         } else {
             alert("Failed to place order!");
         }
     };
 
-    const productTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const productTotal = cart.reduce((sum, item) => sum + item.price, 0);
     const deliveryCharge = formData.insideDhaka ? 80 : 160;
     const discountAmount = discount * productTotal;
     const totalAmount = productTotal - discountAmount + deliveryCharge;
@@ -155,7 +156,7 @@ const CheckoutPage = () => {
                                 {cart.map((item, index) => (
                                     <li key={index} className="flex justify-between py-3 text-sm">
                                         <span>{item.name} x {item.quantity}</span>
-                                        <span className="font-semibold">${(item.price * item.quantity).toFixed(2)}</span>
+                                        <span className="font-semibold">${(item.price).toFixed(2)}</span>
                                     </li>
                                 ))}
                             </ul>
